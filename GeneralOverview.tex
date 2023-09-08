@@ -1,0 +1,165 @@
+\documentclass{article}
+\usepackage{tcolorbox}
+\usepackage{listings}
+
+\author{Aaron Steinberg}
+\title{Resource Automation Project}
+\date{August 18th, 2023}
+\begin{document}
+\maketitle
+
+\begin{tcolorbox}
+    \section*{Contents}
+    \begin{enumerate}
+        \item The Problem of Resource Sbandonment (pages 1-2)
+        \item Identifying Abandoned Resources
+        \item Identifying Abandoned Resources as They Become Abandoned
+        \item Exploring Already Implemented Solutions
+        \item Necessary Sub-functionality
+        \item Links
+    \end{enumerate}
+\end{tcolorbox}
+
+\newpage
+\section{The problem of resource abandonment}
+\subsection*{Managers and Supervisors}
+\paragraph*{} When a manager, supervisor, or some sort of team lead creates a shared resource, such as a Shared Drive,
+they become the owner of the resource. Years can go by, and teams can grow, and many different people can use this shared resource.
+When the owner of a shared resource leaves the university, their status of ownership does not magically pass down to their immediate subordinate or supervisor, yet.
+Right now, lots of support tickets come in that involve admins manually making these changes.
+
+\subsection*{The Cost of Delayed Action}
+\paragraph*{} Over time, the distance between current owner and original owner can grow considerably.
+For example, an owner might leave the university in 2023, their immediate supervisor might leave in 2024, and new hires/replacements in years following might completely change the hierachy in the position.
+Now, it might become unclear who to transfer the ownership of the still regularly shared resources from the initial current manager, years later, when the first problems arise. This takes more IT time.
+
+\subsection*{More Risks}
+\paragraph*{} Besides the amount of time Google Admins may spend on this problem, the fact is there is a good chance certain rules about privacy and tiered data stop being met when former employees still have access to their large shared drives.
+This is just one example, but there are more risks to keeping the status quo.
+
+\newpage
+\section{Identifying Abandoned Resources}
+\section*{Defining an Abandoned Resource}
+\paragraph*{} An abandoned resource in our context is specicifically an abandoned shared resource.
+It is a shared resource whose owner is no longer affiliated with the university. An abandoned resource can be and is regularly used after it has been abandoned.
+In a Google sense, this is an account where the active field is set to false.
+
+\subsection*{How to Identify an Abandoned Resource in a Query}
+Identifying an abandoned resource with an automated query is possible and the way to go.
+In a micro scale, you can see if you are a member of an abandoned resource by doing the following:
+\begin{tcolorbox}
+    \begin{itemize}
+        \item For all of your shared resources in your drive that you do not own(a subset of the Shared with Me tab):
+        \item Check if the owner is still an active member of the university
+        \item If they are not still active, this resource is abandoned
+    \end{itemize}
+\end{tcolorbox}
+This of course, can only check shared resources you are a member of.
+On a macro scale, where we would need to check for abandoned resources for the entire workspace, things change.
+\subsection*{The Queries and Required Steps}
+On a macro scale, here is what is necessary:
+\begin{tcolorbox}
+    \begin{itemize}
+        \item A Google Cloud project with scope for all Google Drive files
+        \item An OAuth2.0 client ID
+        \item A service account with read only permissions of all drive meta data in the workspace
+        \item Potential Requirement: scope to all user metadata(email, active status, etc)
+    \end{itemize}
+\end{tcolorbox}
+With these requirements met, we can query for the information that we need.
+\textit{These approaches are listed on the next page.}
+\newpage
+\begin{tcolorbox}
+    \textbf{Approach 1:}
+    \begin{itemize}
+        \item For every shared resource in the workspace:
+        \item Check if the owner is a non-active account.
+        \item If the owner is non-active, then the resource is abandoned.
+        \item Return the abandoned resources in an actionable list
+    \end{itemize}
+\end{tcolorbox}
+\begin{tcolorbox}
+    \textbf{Approach 2:}
+    \begin{itemize}
+        \item For every non-active user in the workspace:
+        \item For each one of their shared resources:
+        \item Mark down the shared resource as abandoned.
+        \item Return the abandoned resources in an actionable list
+    \end{itemize}
+\end{tcolorbox}
+
+\paragraph*{Comparing Approaches} Both of these approaches have working logic,
+but they do not perform the same.
+At the top level of the query: approach 1 goes through every single shared resource in the entire workspace,
+while approach 2 goes through every non-active user in the workspace. At the second layer, approach 1 performs negligible operations, but oeration 2 will go through each owned file of the non-active user.
+The operations and runtime of approach 2 will almost always be more efficient than approach 1, though.
+
+\newpage
+\section{Identifying Abandoned Resources as They\\ Become Abandoned}
+The best approach is not simply running queries on their own. The best approach is to run a sufficient 
+number of queries to solve the problem temporaily, and then introduce a new policy/script/query that takes place during offboarding.
+
+During this redfined offboarding process, all shared resources will be transfered to supervisor or immediate subordinate if there is no supervisor.
+This can also be automated using a Google Console Project.
+
+\begin{tcolorbox}
+    \textbf{When an Employee Leaves the University:}
+    \begin{itemize}
+        \item For each shared resource:
+        \item Mark shared resource as abandoned
+    \end{itemize}
+\end{tcolorbox}
+\newpage
+
+\section{Exploring Already Implemented Solutions - GAM}
+\subsection*{Technology Used}
+\begin{tcolorbox}
+    \begin{enumerate}
+        \item \textbf{Advanced GAM}\\https://github.com/taers232c/GAMADV-XTD3
+        \item \textbf{Python}
+    \end{enumerate}
+\end{tcolorbox}
+\subsection*{Their Approach}
+\begin{tcolorbox}
+    \paragraph{}Using the power of GAM, this tool compiles a list of Team Drives owned by suspended users.
+    The "suspended" verbage refers to their Google status, but in our case, it also refers to their
+    status at UCSC. If an account is suspended in the Google ecosystem, it is no longer active in any part of the system.
+    If an account is active in the Google ecosystem, it is not necessarily active everywhere else, due to the asynchronous nature of
+    large systems like a Google workspace.
+
+        
+    \paragraph{}This script uses a variety of GAM commands in order to organize the data into
+    machine readable files. The script then parses through these files. While there is some concern to efficiency in the approach this tool takes,
+    this would be an easy option to modify.
+
+    \paragraph{}The modification or supllementary program, would take the data from the outputted CSV, and perform some type of action.
+
+    This action could be deletion, reassignment of ownerhip, or whatever is deemed the best action to take.
+\end{tcolorbox}
+
+
+\newpage
+\section{Necessary Sub-functionality}
+\subsection*{Finding supervisors and direct subordinates}
+Finding supervisors or subordinates of a suspended user is not incredibly straight forward.
+For one, not every team will have accurate, up-to-date information about their inner-hierachy.
+
+And, even if they all did have accurate information, it might not be stored or accessible in the same way.
+
+In order to actually automate this process of transferring abandoned resources to the next in line,
+we need to further standardize how this data is structured.
+
+\subsection*{Offboarding Overhauls}
+There are multiple reasons why this project is necessary, but a big one is a lack of a complete offboarding process
+in regards to Google assets. When an employee offboards, there needs to be a step where shared assets are transfered on the spot.
+This will eventually completely erase the need of a computationally expensive tool like the described in this document.
+
+Of course, before that happens, it is probably a good idea to fix all abandoned resources in the system.
+
+\newpage
+\section{Links}
+\begin{itemize}
+    \item https://github.com/taers232c/\\GAM-Scripts3/blob/master/GetTeamDriveSuspendedUsersACLs.py
+    \item https://github.com/taers232c/GAMADV-XTD3
+\end{itemize}
+\end{document}
