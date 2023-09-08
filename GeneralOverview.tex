@@ -4,19 +4,18 @@
 
 \author{Aaron Steinberg}
 \title{Resource Automation Project}
-\date{August 18th, 2023}
 \begin{document}
 \maketitle
 
 \begin{tcolorbox}
     \section*{Contents}
     \begin{enumerate}
-        \item The Problem of Resource Sbandonment (pages 1-2)
-        \item Identifying Abandoned Resources
-        \item Identifying Abandoned Resources as They Become Abandoned
-        \item Exploring Already Implemented Solutions
-        \item Necessary Sub-functionality
-        \item Links
+        \item The Problem of Resource Abandonment (pages 1-2)
+        \item Identifying Abandoned Resources (3-4)
+        \item Identifying Abandoned Resources as They Become Abandoned (5)
+        \item Exploring Already Implemented Solutions (6)
+        \item Necessary Sub-functionality and Conclusion(7)
+        \item Links (8)
     \end{enumerate}
 \end{tcolorbox}
 
@@ -32,10 +31,13 @@ Right now, lots of support tickets come in that involve admins manually making t
 \paragraph*{} Over time, the distance between current owner and original owner can grow considerably.
 For example, an owner might leave the university in 2023, their immediate supervisor might leave in 2024, and new hires/replacements in years following might completely change the hierachy in the position.
 Now, it might become unclear who to transfer the ownership of the still regularly shared resources from the initial current manager, years later, when the first problems arise. This takes more IT time.
+At some point in time after enough neglect of resource ownership and management, instead of following a paper trail to discover the natural hierachy, a hierachy need be redfined.
+This is the true cost of delayed action.
 
 \subsection*{More Risks}
 \paragraph*{} Besides the amount of time Google Admins may spend on this problem, the fact is there is a good chance certain rules about privacy and tiered data stop being met when former employees still have access to their large shared drives.
-This is just one example, but there are more risks to keeping the status quo.
+This is just one example, but there are more risks to keeping the status quo. There is a more-than-zero probability we already have policy
+infractions happening directly because of resource mismanagement. This is a very real liablity.
 
 \newpage
 \section{Identifying Abandoned Resources}
@@ -105,10 +107,14 @@ This can also be automated using a Google Console Project.
 \begin{tcolorbox}
     \textbf{When an Employee Leaves the University:}
     \begin{itemize}
+        \item Identify the next in line or supervisor that assets will be transferred to.
         \item For each shared resource:
-        \item Mark shared resource as abandoned
+        \item Transfer to supervisor or mark abandoned if transfer is not possible 
     \end{itemize}
 \end{tcolorbox}
+
+This approach shifts the window of the solution to policy rather than a fix it after the fact solution.
+Policy is the better choice because as discovered earlier in the document, after a certain amount of time, resources get harder and harder to identify and transfer.
 \newpage
 
 \section{Exploring Already Implemented Solutions - GAM}
@@ -137,6 +143,11 @@ This can also be automated using a Google Console Project.
     This action could be deletion, reassignment of ownerhip, or whatever is deemed the best action to take.
 \end{tcolorbox}
 
+This approach is not policy, and it is still a fix after the fact approach.
+However, this is a necessary step in attaining good policy. The problem must be fixed up to the present before any kind of resource policy
+can be established and kept up with. Moreover, this approach can trivially be modified to run during an offboarding process, and it then takes the form of policy rather than a fix.
+
+
 
 \newpage
 \section{Necessary Sub-functionality}
@@ -155,6 +166,15 @@ in regards to Google assets. When an employee offboards, there needs to be a ste
 This will eventually completely erase the need of a computationally expensive tool like the described in this document.
 
 Of course, before that happens, it is probably a good idea to fix all abandoned resources in the system.
+This is what has been described in previous sections.
+
+\section*{Overall Conclusion and Steps to Success}
+\begin{enumerate}
+    \item Fix everything up to the \textit{present} using one of the methods described.
+    \item Overhaul the method that was used to fix the issue into a policy that prevents the issue.
+    \item Update and allow the policy to take different forms, as the UCSC Google ecosystem changes, in a way where abandoned resources no longer have a place.
+    \item Enforce the policy.
+\end{enumerate}
 
 \newpage
 \section{Links}
